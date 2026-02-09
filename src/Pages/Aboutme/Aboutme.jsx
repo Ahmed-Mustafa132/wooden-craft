@@ -13,22 +13,12 @@ import WorkIcon from "@mui/icons-material/Work";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
-
-const theme = {
-  colors: {
-    primary: {
-      main: "#1976d2",
-      dark: "#1565c0",
-      light: "#2196F3",
-    },
-    text: {
-      primary: "#2c3e50",
-      secondary: "#555555",
-    },
-  },
-};
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 
 export default function Aboutme() {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   return (
     <Box sx={{ bgcolor: "background.default", py: 8 }}>
       <Container maxWidth="lg">

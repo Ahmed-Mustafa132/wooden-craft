@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   AppBar,
   Box,
@@ -15,14 +15,19 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useNavigate, useLocation } from "react-router-dom";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import CartDrawer from "../Card/Card";
 import { useAuth } from "../../Context/AuthContext";
 
 const Navbar = () => {
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("md"));
+  const { isDarkMode, toggleTheme } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const { isLoggedIn, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -39,18 +44,63 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
   const userData = JSON.parse(localStorage.getItem("userData"));
-  console.log(userData);
 
   const navItems =
     userData?.role === "admin"
       ? [...baseNavItems, { name: "Dashboard", path: "/dashboard" }]
       : userData?.role === "user"
-      ? [...baseNavItems, { name: "Orders", path: "/order" }]
-      : baseNavItems;
+        ? [...baseNavItems, { name: "Orders", path: "/order" }]
+        : baseNavItems;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const userSection = (
+    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+      <IconButton
+        onClick={() => toggleTheme()}
+        sx={{ color: "#fff" }}
+      >
+        {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
+      <CartDrawer />
+      {isLoggedIn ? (
+        <>
+          <IconButton
+            sx={{ color: "#fff" }}
+            onClick={() => navigate("/profile")}
+          >
+            <PersonIcon />
+          </IconButton>
+          <Button
+            sx={{
+              color: "#fff",
+              textTransform: "none",
+              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+            }}
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            sx={{
+              color: "#fff",
+              textTransform: "none",
+              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+            }}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>
+
+        </>
+      )}
+    </Box>
+  );
 
   const drawer = (
     <Box
@@ -59,7 +109,7 @@ const Navbar = () => {
     >
       <Typography
         variant="h6"
-        sx={{ my: 2, color: theme.colors.background.paper }}
+        sx={{ my: 2, color: "#fff" }}
       >
         Wooden Craft
       </Typography>
@@ -71,7 +121,7 @@ const Navbar = () => {
               justifyContent: "center",
               borderBottom:
                 location.pathname === item.path
-                  ? `3px solid ${theme.colors.background.paper}`
+                  ? `3px solid ${"#fff"}`
                   : "3px solid transparent",
             }}
             onClick={() => navigate(item.path)}
@@ -82,39 +132,13 @@ const Navbar = () => {
                 "& .MuiTypography-root": {
                   fontSize: "1.1rem",
                   fontWeight: 500,
-                  color: theme.colors.background.paper,
+                  color: theme.colors.text.secondary,
                 },
               }}
             />
           </ListItem>
         ))}
       </List>
-    </Box>
-  );
-
-  const userSection = (
-    <Box sx={{ display: "flex", gap: 2 }}>
-      <CartDrawer />
-      {isLoggedIn ? (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography sx={{ color: theme.colors.background.paper, mr: 1 }}>
-            {userData?.name}
-          </Typography>
-          <IconButton
-            sx={{ color: theme.colors.background.paper }}
-            onClick={handleLogout}
-          >
-            <PersonIcon />
-          </IconButton>
-        </Box>
-      ) : (
-        <IconButton
-          sx={{ color: theme.colors.background.paper }}
-          onClick={() => navigate("/login")}
-        >
-          <PersonIcon />
-        </IconButton>
-      )}
     </Box>
   );
 
@@ -129,7 +153,7 @@ const Navbar = () => {
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {isMobile && (
             <IconButton
-              sx={{ color: theme.colors.background.paper }}
+              sx={{ color: "#fff" }}
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
@@ -143,7 +167,7 @@ const Navbar = () => {
             component="div"
             sx={{
               flexGrow: isMobile ? 0 : 1,
-              color: theme.colors.background.paper,
+              color: "#fff",
               fontWeight: 700,
               letterSpacing: ".5px",
             }}
@@ -157,18 +181,18 @@ const Navbar = () => {
                 <Button
                   key={item.name}
                   sx={{
-                    color: theme.colors.background.paper,
+                    color: "#fff",
                     fontSize: "1rem",
                     textTransform: "none",
                     borderBottom:
                       location.pathname === item.path
-                        ? `3px solid ${theme.colors.background.paper}`
+                        ? `3px solid ${"#fff"}`
                         : "3px solid transparent",
                     borderRadius: 0,
                     paddingBottom: "4px",
                     transition: "all 0.3s ease",
                     "&:hover": {
-                      color: theme.colors.primary.light,
+                      color: "#fff",
                       backgroundColor: "transparent",
                     },
                   }}
@@ -197,7 +221,7 @@ const Navbar = () => {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: 240,
-              bgcolor: theme.colors.primary.main,
+              bgcolor: "#fff",
             },
           }}
         >

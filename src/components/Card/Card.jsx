@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -15,25 +15,27 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import { useCart } from "../../Context/CartContext";
 import { useNavigate } from "react-router-dom";
 const CartDrawer = () => {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
-
 
   return (
     <>
       <IconButton
         onClick={() => setIsOpen(true)}
-        sx={{ color: theme.colors.background.paper }}
+        sx={{ color: "#fff", bgcolor: theme.colors.background }}
       >
         <Badge badgeContent={cartItems.length} color="error">
           <ShoppingCartIcon />

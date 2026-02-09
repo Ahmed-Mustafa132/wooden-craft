@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -17,20 +17,26 @@ import {
   Inventory as ProductsIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import axiosInstance from "../../axiosConfig/axiosConfig";
 
 export default function Dashboard() {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const [data, setData] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance.get("/orders/dashboard").then((res) => {
-      setData(res.data);
-    }).catch((err) => {
-      console.error("Error fetching dashboard data:");
-      navigate("/");
-    });
+    axiosInstance
+      .get("/orders/dashboard")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching dashboard data:");
+        navigate("/");
+      });
   }, []);
 
   const dashboardItems = [
@@ -56,7 +62,7 @@ export default function Dashboard() {
       description: "  mange your Users account",
       action: () => navigate("/dashboard/users"),
       color: theme.colors.primary.light,
-      stats: `${data.users} users` ,
+      stats: `${data.users} users`,
     },
   ];
 

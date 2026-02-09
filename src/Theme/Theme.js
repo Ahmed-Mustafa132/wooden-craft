@@ -1,4 +1,4 @@
-const theme = {
+export const lightTheme = {
     colors: {
         primary: {
             main: "#1976d2",
@@ -16,4 +16,28 @@ const theme = {
         shadow: "rgba(0,0,0,0.15)",
     },
 };
-export default theme
+
+export const darkTheme = {
+    colors: {
+        primary: {
+            main: "#1565c0",
+            dark: "#0d47a1",
+            light: "#42a5f5",
+        },
+        text: {
+            primary: "#ffffff",
+            secondary: "#ffffffd8",
+        },
+        background: {
+            paper: "#2c3e50",
+            caffe: "#34495e",
+        },
+        shadow: "rgba(0,0,0,0.5)",
+    },
+};
+
+export const getTheme = (isDarkMode) => {
+    return isDarkMode ? darkTheme : lightTheme;
+};
+
+export default lightTheme;

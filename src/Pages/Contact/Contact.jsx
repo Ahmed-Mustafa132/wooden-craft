@@ -17,9 +17,12 @@ import {
   Twitter,
   Instagram,
 } from "@mui/icons-material";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 
 const Contact = () => {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here

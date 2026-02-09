@@ -25,16 +25,19 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
+import { getTheme } from "../../Theme/Theme";
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Search as SearchIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import theme from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import axiosInstance from "../../axiosConfig/axiosConfig";
 
 export default function DashboardUsers() {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -42,25 +45,29 @@ export default function DashboardUsers() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-        // Update the Authorization header with the current token
-        const response = await axiosInstance.get("/users").then((res) => {
-          console.log(res.data)
+      // Update the Authorization header with the current token
+      const response = await axiosInstance
+        .get("/users")
+        .then((res) => {
+          console.log(res.data);
           setUsers(res.data);
-        }).catch((err)=>{
-          console.error("Failed to fetch users:", err);
-          setError("Failed to fetch users. Make sure you have admin privileges.");
-          
-        }).finally(() => {
-          setLoading(false)
         })
-      }
+        .catch((err) => {
+          console.error("Failed to fetch users:", err);
+          setError(
+            "Failed to fetch users. Make sure you have admin privileges.",
+          );
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
     fetchUsers();
   }, []);
-
 
   const handleEdit = async (id) => {
     setLoading(true);
@@ -128,7 +135,7 @@ export default function DashboardUsers() {
     if (currentUser.password) {
       if (!validatePassword(currentUser.password)) {
         setError(
-          "Password must be at least 6 characters and contain at least one lowercase letter, one uppercase letter, and one number"
+          "Password must be at least 6 characters and contain at least one lowercase letter, one uppercase letter, and one number",
         );
         return;
       }
@@ -154,14 +161,14 @@ export default function DashboardUsers() {
 
       const response = await axiosInstance.put(
         `/users/${currentUser._id}`,
-        userData
+        userData,
       );
 
       // Update the user in the local state
       setUsers(
         users.map((user) =>
-          user._id === currentUser._id ? response.data.user : user
-        )
+          user._id === currentUser._id ? response.data.user : user,
+        ),
       );
 
       handleDialogClose();
@@ -178,7 +185,7 @@ export default function DashboardUsers() {
     (user) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+      user.role.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

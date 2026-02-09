@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { CartProvider } from "./Context/CartContext";
 import { AuthProvider } from "./Context/AuthContext";
+import { ThemeProvider } from "./Context/ThemeContext";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
-import Register from "./Pages/Register/Register";
 import Products from "./Pages/Products/Products";
 import Product from "./Pages/Product/Product";
 import CreateProduct from "./Pages/CreateProduct/CreateProduct";
@@ -22,14 +22,14 @@ import MyOrders from "./Pages/MyOrders/MyOrders";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <CartProvider>
-          <Navbar />
-          <Routes>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <CartProvider>
+            <Navbar />
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<Product />} />
             <Route path="/aboutme" element={<Aboutme />} />
@@ -48,11 +48,12 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order" element={<MyOrders />} />
             <Route path="*" element={<Error />} />
-          </Routes>
-          <Footer />
-        </CartProvider>
-      </BrowserRouter>
-    </AuthProvider>
+            </Routes>
+            <Footer />
+          </CartProvider>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

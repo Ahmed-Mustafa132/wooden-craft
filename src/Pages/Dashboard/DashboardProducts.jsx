@@ -32,10 +32,13 @@ import {
   Close as CloseIcon,
   CloudUpload as CloudUploadIcon,
 } from "@mui/icons-material";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import axiosInstance from "../../axiosConfig/axiosConfig";
 
 export default function DashboardProducts() {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -115,20 +118,20 @@ export default function DashboardProducts() {
     try {
       // Create a FormData object to handle file upload
       const formData = new FormData();
-      
+
       // Add all product fields to the formData
-      Object.keys(currentProduct).forEach(key => {
-        if (key !== 'image') {
+      Object.keys(currentProduct).forEach((key) => {
+        if (key !== "image") {
           formData.append(key, currentProduct[key]);
         }
       });
-      
+
       // Add the image file if a new one was selected
       if (imageFile) {
-        formData.append('image', imageFile);
+        formData.append("image", imageFile);
       } else {
         // If no new image was selected, keep the existing image URL
-        formData.append('image', currentProduct.image);
+        formData.append("image", currentProduct.image);
       }
 
       const response = await axiosInstance.put(
@@ -136,16 +139,16 @@ export default function DashboardProducts() {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
+            "Content-Type": "multipart/form-data",
+          },
+        },
       );
 
       // Update the product in the local state
       setProducts(
         products.map((product) =>
-          product._id === currentProduct._id ? response.data.product : product
-        )
+          product._id === currentProduct._id ? response.data.product : product,
+        ),
       );
 
       handleDialogClose();
@@ -161,7 +164,7 @@ export default function DashboardProducts() {
   const filteredProducts = products.filter(
     (product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+      product.category.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -339,13 +342,17 @@ export default function DashboardProducts() {
                 <Typography variant="subtitle1" gutterBottom>
                   Product Image
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {imagePreview && (
                     <Box sx={{ mb: 2 }}>
-                      <img 
-                        src={imagePreview} 
-                        alt="Product preview" 
-                        style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                      <img
+                        src={imagePreview}
+                        alt="Product preview"
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "200px",
+                          objectFit: "contain",
+                        }}
                       />
                     </Box>
                   )}

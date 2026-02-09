@@ -17,50 +17,51 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import axiosInstance from "../../axiosConfig/axiosConfig";
-import theme from "../../Theme/Theme";
+import { getTheme } from "../../Theme/Theme";
+import { useThemeContext } from "../../Context/ThemeContext";
 import { useCart } from "../../Context/CartContext";
 
-
-
 export default function ProductDetails() {
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [userRating, setUserRating] = useState(0);
   const [hover, setHover] = useState(-1);
-const { addToCart } = useCart();
+  const { addToCart } = useCart();
   useEffect(() => {
-      axiosInstance.get(`/products/${id}`)
-        .then((response) => {
-            setProduct(response.data.product);
-        })
-        .catch((error) => {
-            console.error("Error fetching product:", error);
-        });
+    axiosInstance
+      .get(`/products/${id}`)
+      .then((response) => {
+        setProduct(response.data.product);
+      })
+      .catch((error) => {
+        console.error("Error fetching product:", error);
+      });
   }, [id]);
-const handleRatingSubmit = (newValue) => {
-  setUserRating(newValue);
-  axiosInstance
-    .patch(`/products/${id}/rating`, {
-      rating: newValue,
-    })
-    .then((response) => {
-      setProduct(response.data.product);
-      console.log("Rating submitted successfully");
-    })
-    .catch((error) => {
-      console.error("Error submitting rating:", error);
-    });
+  const handleRatingSubmit = (newValue) => {
+    setUserRating(newValue);
+    axiosInstance
+      .patch(`/products/${id}/rating`, {
+        rating: newValue,
+      })
+      .then((response) => {
+        setProduct(response.data.product);
+        console.log("Rating submitted successfully");
+      })
+      .catch((error) => {
+        console.error("Error submitting rating:", error);
+      });
   };
-   const handleAddToCart = () => {
-     const cartItem = {
-       id: product._id,
-       title: product.title,
-       price: product.price,
-       image: product.image,
-     };
-     addToCart(cartItem);
-   };
-
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: product._id,
+      title: product.title,
+      price: product.price,
+      image: product.image,
+    };
+    addToCart(cartItem);
+  };
 
   if (!product) return null;
 

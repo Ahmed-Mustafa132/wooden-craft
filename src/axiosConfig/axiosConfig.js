@@ -7,4 +7,5 @@ const axiosInstance = axios.create({
         'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
 });
+console.log("Axios instance created with base URL:", axiosInstance.defaults.baseURL);
 export default axiosInstance;

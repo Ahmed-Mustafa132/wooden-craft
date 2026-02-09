@@ -1,5 +1,5 @@
 .header {
-    background-image: url('../../assets/Images/header.jpg');
+    background-image: url('../../../assets/Images/header.jpg');
     background-size: cover;
     background-position: center;
     height: 90vh;
@@ -42,4 +42,20 @@
     background: #fff;
     color: #000;
     transform: scale(1.1);
+}
+@media screen and (max-width: 1000px) {
+    .header {
+        height: 70vh;
+    }
+    .headerContent {
+        padding: 0 2rem;
+        gap: 2rem;
+    }
+    .headerContent h1 {
+        font-size: 2rem;
+    }
+    .headerContent p {
+        font-size: 1rem;
+        width: 100%;
+    }
 }
