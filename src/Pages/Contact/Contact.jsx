@@ -23,20 +23,49 @@ import { useThemeContext } from "../../Context/ThemeContext";
 const Contact = () => {
   const { isDarkMode } = useThemeContext();
   const theme = getTheme(isDarkMode);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+  };
+
+  const textFieldSx = {
+    "& .MuiOutlinedInput-root": {
+      color: theme.colors.text.primary,
+      "& fieldset": {
+        borderColor: theme.colors.text.secondary,
+      },
+      "&:hover fieldset": {
+        borderColor: theme.colors.primary.main,
+      },
+    },
+    "& .MuiInputBase-input::placeholder": {
+      color: theme.colors.text.secondary,
+      opacity: 0.7,
+    },
+    "& .MuiInputLabel-root": {
+      color: theme.colors.text.secondary,
+    },
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 8,
+        backgroundColor: theme.colors.background.default,
+        minHeight: "100vh",
+      }}
+    >
       <Grid container spacing={4}>
         {/* Contact Form Section */}
         <Grid item xs={12} md={7}>
-          <Paper elevation={3} sx={{ p: 4 }}>
+          <Paper
+            elevation={3}
+            sx={{ p: 4, backgroundColor: theme.colors.background.paper }}
+          >
             <Typography
               variant="h4"
-              sx={{ mb: 4, color: theme.colors.primary.main }}
+              sx={{ mb: 4, color: theme.colors.text.primary }}
             >
               Get in Touch
             </Typography>
@@ -48,6 +77,7 @@ const Contact = () => {
                     label="First Name"
                     required
                     variant="outlined"
+                    sx={textFieldSx}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -56,6 +86,7 @@ const Contact = () => {
                     label="Last Name"
                     required
                     variant="outlined"
+                    sx={textFieldSx}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -65,6 +96,7 @@ const Contact = () => {
                     required
                     type="email"
                     variant="outlined"
+                    sx={textFieldSx}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -73,6 +105,7 @@ const Contact = () => {
                     label="Subject"
                     required
                     variant="outlined"
+                    sx={textFieldSx}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -83,6 +116,7 @@ const Contact = () => {
                     multiline
                     rows={4}
                     variant="outlined"
+                    sx={textFieldSx}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -92,6 +126,7 @@ const Contact = () => {
                     size="large"
                     sx={{
                       bgcolor: theme.colors.primary.main,
+                      color: "#fff",
                       "&:hover": {
                         bgcolor: theme.colors.primary.dark,
                       },
@@ -107,10 +142,17 @@ const Contact = () => {
 
         {/* Contact Information Section */}
         <Grid item xs={12} md={5}>
-          <Paper elevation={3} sx={{ p: 4, height: "100%" }}>
+          <Paper
+            elevation={3}
+            sx={{
+              p: 4,
+              height: "100%",
+              backgroundColor: theme.colors.background.paper,
+            }}
+          >
             <Typography
               variant="h4"
-              sx={{ mb: 4, color: theme.colors.primary.main }}
+              sx={{ mb: 4, color: theme.colors.text.primary }}
             >
               Contact Information
             </Typography>
@@ -118,15 +160,28 @@ const Contact = () => {
             <Box sx={{ mb: 4 }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Phone sx={{ mr: 2, color: theme.colors.primary.main }} />
-                <Typography variant="body1">+1 234 567 890</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.colors.text.primary }}
+                >
+                  +1 234 567 890
+                </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Email sx={{ mr: 2, color: theme.colors.primary.main }} />
-                <Typography variant="body1">contact@example.com</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.colors.text.primary }}
+                >
+                  contact@example.com
+                </Typography>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <LocationOn sx={{ mr: 2, color: theme.colors.primary.main }} />
-                <Typography variant="body1">
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.colors.text.primary }}
+                >
                   123 Business Street, New York, NY 10001
                 </Typography>
               </Box>
@@ -134,7 +189,7 @@ const Contact = () => {
 
             <Typography
               variant="h6"
-              sx={{ mb: 2, color: theme.colors.primary.main }}
+              sx={{ mb: 2, color: theme.colors.text.primary }}
             >
               Follow Us
             </Typography>

@@ -10,7 +10,7 @@ import Products from "./Pages/Products/Products";
 import Product from "./Pages/Product/Product";
 import CreateProduct from "./Pages/CreateProduct/CreateProduct";
 import Footer from "./components/Footer/Footer";
-import Aboutme from "./Pages/Aboutme/Aboutme";
+import Aboutme from "./Pages/About/About";
 import Contact from "./Pages/Contact/Contact";
 import Error from "./Pages/Error/Error";
 import Dashboard from "./Pages/Dashboard/Dashbord";
@@ -19,6 +19,7 @@ import DashboardOrders from "./Pages/Dashboard/OrdersDashboard";
 import DashboardUsers from "./Pages/Dashboard/DashBoardUsers";
 import Checkout from "./Pages/Checkout/Checkout";
 import MyOrders from "./Pages/MyOrders/MyOrders";
+import Profile from "./Pages/Profile/profile";
 
 function App() {
   return (
@@ -28,26 +29,23 @@ function App() {
           <CartProvider>
             <Navbar />
             <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<Product />} />
-            <Route path="/aboutme" element={<Aboutme />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/dashboard">
-              <Route index element={<Dashboard />} />
-              <Route path="CreateProduct" element={<CreateProduct />} />
-              <Route path="products" element={<DashboardProducts />} />
-              <Route path="orders" element={<DashboardOrders />} />
-              <Route path="users" element={<DashboardUsers />} />
-              {/* 
-              <Route path="categories" element={<DashboardCategories />} />
-              <Route path="reviews" element={<DashboardReviews />} />
-              <Route path="offers" element={<DashboardOffers />} /> */}
-            </Route>
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order" element={<MyOrders />} />
-            <Route path="*" element={<Error />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<Product />} />
+              <Route path="/about" element={<Aboutme />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/dashboard">
+                <Route index element={<Dashboard />} />
+                <Route path="CreateProduct" element={<CreateProduct />} />
+                <Route path="products" element={<DashboardProducts />} />
+                <Route path="orders" element={<DashboardOrders />} />
+                <Route path="users" element={<DashboardUsers />} />
+              </Route>
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order" element={<MyOrders />} />
+              <Route path="*" element={<Error />} />
             </Routes>
             <Footer />
           </CartProvider>

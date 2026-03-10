@@ -38,9 +38,13 @@ import {
 } from "@mui/icons-material";
 import axiosInstance from "../../axiosConfig/axiosConfig";
 import { useNavigate } from "react-router-dom";
+import { useThemeContext } from "../../Context/ThemeContext";
+import { getTheme } from "../../Theme/Theme";
 
 const OrdersDashboard = () => {
   const navigate = useNavigate();
+  const { isDarkMode } = useThemeContext();
+  const theme = getTheme(isDarkMode);
   const [orders, setOrders] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [editDialog, setEditDialog] = useState({ open: false, order: null });
@@ -58,7 +62,7 @@ const OrdersDashboard = () => {
     }
   }, []);
 
-  const fetchOrders = () => {    
+  const fetchOrders = () => {
     axiosInstance.get("/orders").then((response) => {
       setOrders(response.data.data.orders || []);
       setTotalRevenue(response.data.data.totalRevenue || 0);
@@ -85,8 +89,8 @@ const OrdersDashboard = () => {
         orders.map((order) =>
           order._id === editDialog.order._id
             ? { ...order, status: newStatus }
-            : order
-        )
+            : order,
+        ),
       );
 
       setEditDialog({ open: false, order: null });
@@ -114,14 +118,22 @@ const OrdersDashboard = () => {
   };
 
   const StatCard = ({ title, value, icon }) => (
-    <Card elevation={3}>
+    <Card
+      elevation={3}
+      sx={{
+        backgroundColor: theme.colors.background.paper,
+        color: theme.colors.text.primary,
+      }}
+    >
       <CardContent>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box>
-            <Typography color="textSecondary" gutterBottom>
+            <Typography color={theme.colors.text.secondary} gutterBottom>
               {title}
             </Typography>
-            <Typography variant="h4">{value}</Typography>
+            <Typography variant="h4" sx={{ color: theme.colors.text.primary }}>
+              {value}
+            </Typography>
           </Box>
           {icon}
         </Box>
@@ -131,8 +143,19 @@ const OrdersDashboard = () => {
 
   return (
     <Container maxWidth="xl">
-      <Box py={4}>
-        <Typography variant="h4" gutterBottom>
+      <Box
+        py={4}
+        sx={{
+          backgroundColor: theme.colors.background.default,
+          color: theme.colors.text.primary,
+          minHeight: "100vh",
+        }}
+      >
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ color: theme.colors.text.primary }}
+        >
           Orders Dashboard
         </Typography>
 
@@ -177,25 +200,54 @@ const OrdersDashboard = () => {
           </Grid>
         </Grid>
 
-        <TableContainer component={Paper} elevation={3}>
+        <TableContainer
+          component={Paper}
+          elevation={3}
+          sx={{
+            backgroundColor: theme.colors.background.paper,
+            color: theme.colors.text.primary,
+          }}
+        >
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer</TableCell>
-                <TableCell>Products Count</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Actions</TableCell>
+              <TableRow
+                sx={{ backgroundColor: theme.colors.background.default }}
+              >
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Order ID
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Customer
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Products Count
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Amount
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Status
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orders.map((order) => (
                 <TableRow key={order._id}>
-                  <TableCell>{order._id}</TableCell>
-                  <TableCell>{order.userName}</TableCell>
-                  <TableCell>{order.productsCount} items</TableCell>
-                  <TableCell>${order.totalPrice}</TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {order._id}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {order.userName}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {order.productsCount} items
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    ${order.totalPrice}
+                  </TableCell>
                   <TableCell>
                     <Chip
                       label={order.status}
@@ -233,19 +285,34 @@ const OrdersDashboard = () => {
           onClose={() => setProductsDialog({ open: false, order: null })}
           maxWidth="md"
           fullWidth
+          PaperProps={{
+            sx: {
+              backgroundColor: theme.colors.background.paper,
+              color: theme.colors.text.primary,
+            },
+          }}
         >
-          <DialogTitle>
+          <DialogTitle sx={{ color: theme.colors.text.primary }}>
             Order Products - {productsDialog.order?._id}
           </DialogTitle>
           <DialogContent>
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1" color="textSecondary">
+              <Typography
+                variant="subtitle1"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 Customer: {productsDialog.order?.userName}
               </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
+              <Typography
+                variant="subtitle1"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 Order Total: ${productsDialog.order?.totalPrice}
               </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
+              <Typography
+                variant="subtitle1"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 Status:
                 <Chip
                   label={productsDialog.order?.status}
@@ -259,21 +326,46 @@ const OrdersDashboard = () => {
 
             {productsDialog.order?.products &&
             productsDialog.order.products.length > 0 ? (
-              <TableContainer component={Paper} variant="outlined">
+              <TableContainer
+                component={Paper}
+                variant="outlined"
+                sx={{ backgroundColor: theme.colors.background.default }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Product Name</TableCell>
-                      <TableCell align="center">Quantity</TableCell>
-                      <TableCell align="right">Unit Price</TableCell>
-                      <TableCell align="right">Total</TableCell>
+                      <TableCell sx={{ color: theme.colors.text.primary }}>
+                        Product Name
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ color: theme.colors.text.primary }}
+                      >
+                        Quantity
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{ color: theme.colors.text.primary }}
+                      >
+                        Unit Price
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{ color: theme.colors.text.primary }}
+                      >
+                        Total
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {productsDialog.order.products.map((product, index) => (
                       <TableRow key={product.id || index}>
-                        <TableCell>
-                          <Typography variant="body2" fontWeight="medium">
+                        <TableCell sx={{ color: theme.colors.text.primary }}>
+                          <Typography
+                            variant="body2"
+                            fontWeight="medium"
+                            sx={{ color: theme.colors.text.primary }}
+                          >
                             {product.productTitle}
                           </Typography>
                         </TableCell>
@@ -284,13 +376,21 @@ const OrdersDashboard = () => {
                             variant="outlined"
                           />
                         </TableCell>
-                        <TableCell align="right">${product.price}</TableCell>
-                        <TableCell align="right">
+                        <TableCell
+                          align="right"
+                          sx={{ color: theme.colors.text.primary }}
+                        >
+                          ${product.price}
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ color: theme.colors.text.primary }}
+                        >
                           <Typography fontWeight="medium">
                             $
                             {calculateProductTotal(
                               product.price,
-                              product.quantity
+                              product.quantity,
                             )}
                           </Typography>
                         </TableCell>
@@ -300,7 +400,11 @@ const OrdersDashboard = () => {
                 </Table>
               </TableContainer>
             ) : (
-              <Typography color="textSecondary" align="center">
+              <Typography
+                color="textSecondary"
+                align="center"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 No products found for this order
               </Typography>
             )}
@@ -308,6 +412,7 @@ const OrdersDashboard = () => {
           <DialogActions>
             <Button
               onClick={() => setProductsDialog({ open: false, order: null })}
+              sx={{ color: theme.colors.primary.main }}
             >
               Close
             </Button>
@@ -318,24 +423,47 @@ const OrdersDashboard = () => {
         <Dialog
           open={editDialog.open}
           onClose={() => setEditDialog({ open: false, order: null })}
+          PaperProps={{
+            sx: {
+              backgroundColor: theme.colors.background.paper,
+              color: theme.colors.text.primary,
+            },
+          }}
         >
-          <DialogTitle>Edit Order Status</DialogTitle>
+          <DialogTitle sx={{ color: theme.colors.text.primary }}>
+            Edit Order Status
+          </DialogTitle>
           <DialogContent>
             <Box sx={{ mb: 2 }}>
-              <Typography variant="body2" color="textSecondary">
+              <Typography
+                variant="body2"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 Order ID: {editDialog.order?._id}
               </Typography>
-              <Typography variant="body2" color="textSecondary">
+              <Typography
+                variant="body2"
+                sx={{ color: theme.colors.text.secondary }}
+              >
                 Customer: {editDialog.order?.userName}
               </Typography>
             </Box>
             <FormControl fullWidth sx={{ mt: 2 }}>
-              <Typography variant="body2" sx={{ mb: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{ mb: 1, color: theme.colors.text.primary }}
+              >
                 Select New Status:
               </Typography>
               <Select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value)}
+                sx={{
+                  color: theme.colors.text.primary,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: theme.colors.text.secondary,
+                  },
+                }}
               >
                 <MenuItem value="pending">Pending</MenuItem>
                 <MenuItem value="completed">Completed</MenuItem>
@@ -344,10 +472,20 @@ const OrdersDashboard = () => {
             </FormControl>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setEditDialog({ open: false, order: null })}>
+            <Button
+              onClick={() => setEditDialog({ open: false, order: null })}
+              sx={{ color: theme.colors.text.secondary }}
+            >
               Cancel
             </Button>
-            <Button onClick={handleStatusUpdate} variant="contained">
+            <Button
+              onClick={handleStatusUpdate}
+              variant="contained"
+              sx={{
+                backgroundColor: theme.colors.primary.main,
+                "&:hover": { backgroundColor: theme.colors.primary.dark },
+              }}
+            >
               Update Status
             </Button>
           </DialogActions>

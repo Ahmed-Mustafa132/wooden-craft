@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Box,
@@ -42,6 +42,7 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "Products", path: "/products" },
     { name: "Contact", path: "/contact" },
+    { name: "About", path: "/about" },
   ];
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -58,10 +59,7 @@ const Navbar = () => {
 
   const userSection = (
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-      <IconButton
-        onClick={() => toggleTheme()}
-        sx={{ color: "#fff" }}
-      >
+      <IconButton onClick={() => toggleTheme()} sx={{ color: "#fff" }}>
         {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
       <CartDrawer />
@@ -96,7 +94,6 @@ const Navbar = () => {
           >
             Login
           </Button>
-
         </>
       )}
     </Box>
@@ -107,10 +104,7 @@ const Navbar = () => {
       onClick={handleDrawerToggle}
       sx={{ textAlign: "center", bgcolor: theme.colors.primary.main }}
     >
-      <Typography
-        variant="h6"
-        sx={{ my: 2, color: "#fff" }}
-      >
+      <Typography variant="h6" sx={{ my: 2, color: "#fff" }}>
         Wooden Craft
       </Typography>
       <List>

@@ -22,7 +22,6 @@ import {
   MenuItem,
   Grid,
   CircularProgress,
-  Input,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -107,7 +106,6 @@ export default function DashboardProducts() {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
-      // Create a preview URL for the selected image
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
     }
@@ -116,21 +114,17 @@ export default function DashboardProducts() {
   const handleUpdateProduct = async () => {
     setLoading(true);
     try {
-      // Create a FormData object to handle file upload
       const formData = new FormData();
 
-      // Add all product fields to the formData
       Object.keys(currentProduct).forEach((key) => {
         if (key !== "image") {
           formData.append(key, currentProduct[key]);
         }
       });
 
-      // Add the image file if a new one was selected
       if (imageFile) {
         formData.append("image", imageFile);
       } else {
-        // If no new image was selected, keep the existing image URL
         formData.append("image", currentProduct.image);
       }
 
@@ -144,7 +138,6 @@ export default function DashboardProducts() {
         },
       );
 
-      // Update the product in the local state
       setProducts(
         products.map((product) =>
           product._id === currentProduct._id ? response.data.product : product,
@@ -160,7 +153,6 @@ export default function DashboardProducts() {
     }
   };
 
-  // Filter products based on search term
   const filteredProducts = products.filter(
     (product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -168,7 +160,16 @@ export default function DashboardProducts() {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        mt: 4,
+        mb: 4,
+        backgroundColor: theme.colors.background.main,
+        borderRadius: 1,
+        p: 3,
+      }}
+    >
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h4"
@@ -185,7 +186,23 @@ export default function DashboardProducts() {
             size="small"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ flexGrow: 1 }}
+            sx={{
+              flexGrow: 1,
+              "& .MuiOutlinedInput-root": {
+                color: theme.colors.text.primary,
+                backgroundColor: theme.colors.background.paper,
+                "& fieldset": {
+                  borderColor: theme.colors.border,
+                },
+                "&:hover fieldset": {
+                  borderColor: theme.colors.primary.main,
+                },
+              },
+              "& .MuiOutlinedInput-input::placeholder": {
+                color: theme.colors.text.secondary,
+                opacity: 0.7,
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <SearchIcon
@@ -200,6 +217,7 @@ export default function DashboardProducts() {
               startIcon={<AddIcon />}
               sx={{
                 backgroundColor: theme.colors.primary.main,
+                color: "#fff",
                 "&:hover": { backgroundColor: theme.colors.primary.dark },
               }}
             >
@@ -208,28 +226,64 @@ export default function DashboardProducts() {
           </Link>
         </Stack>
 
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            backgroundColor: theme.colors.background.paper,
+            color: theme.colors.text.primary,
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow
                 sx={{ backgroundColor: theme.colors.background.default }}
               >
-                <TableCell>Product Name</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Stock</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Product Name
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Category
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Price
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Stock
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Rating
+                </TableCell>
+                <TableCell sx={{ color: theme.colors.text.primary }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredProducts.map((product) => (
-                <TableRow key={product._id}>
-                  <TableCell>{product.title}</TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>${product.price}</TableCell>
-                  <TableCell>{product.stockQuantity}</TableCell>
-                  <TableCell>{product.rating}</TableCell>
+                <TableRow
+                  key={product._id}
+                  sx={{
+                    backgroundColor: theme.colors.background.paper,
+                    "&:hover": {
+                      backgroundColor: theme.colors.background.default,
+                    },
+                  }}
+                >
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {product.title}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {product.category}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    ${product.price}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {product.stockQuantity}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {product.rating}
+                  </TableCell>
                   <TableCell>
                     <IconButton
                       onClick={() => handleEdit(product._id)}
@@ -257,24 +311,35 @@ export default function DashboardProducts() {
         onClose={handleDialogClose}
         fullWidth
         maxWidth="md"
+        PaperProps={{
+          sx: {
+            backgroundColor: theme.colors.background.paper,
+            color: theme.colors.text.primary,
+          },
+        }}
       >
         <DialogTitle
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            color: theme.colors.text.primary,
+            borderBottom: `1px solid ${theme.colors.border}`,
           }}
         >
           <Typography variant="h6">Edit Product</Typography>
           <IconButton onClick={handleDialogClose}>
-            <CloseIcon />
+            <CloseIcon sx={{ color: theme.colors.text.primary }} />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent dividers>
+        <DialogContent
+          dividers
+          sx={{ backgroundColor: theme.colors.background.paper }}
+        >
           {loading && (
             <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: theme.colors.primary.main }} />
             </Box>
           )}
 
@@ -294,6 +359,23 @@ export default function DashboardProducts() {
                   value={currentProduct.title}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                      "&:hover fieldset": {
+                        borderColor: theme.colors.primary.main,
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: theme.colors.text.primary,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -305,6 +387,17 @@ export default function DashboardProducts() {
                   value={currentProduct.category}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 >
                   <MenuItem value="furniture">Furniture</MenuItem>
                   <MenuItem value="decor">Decor</MenuItem>
@@ -325,6 +418,17 @@ export default function DashboardProducts() {
                   InputProps={{
                     startAdornment: "$",
                   }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -336,15 +440,37 @@ export default function DashboardProducts() {
                   value={currentProduct.stockQuantity}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: theme.colors.text.primary }}
+                  gutterBottom
+                >
                   Product Image
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {imagePreview && (
-                    <Box sx={{ mb: 2 }}>
+                    <Box
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        backgroundColor: theme.colors.background.default,
+                        borderRadius: 1,
+                      }}
+                    >
                       <img
                         src={imagePreview}
                         alt="Product preview"
@@ -362,6 +488,7 @@ export default function DashboardProducts() {
                     startIcon={<CloudUploadIcon />}
                     sx={{
                       backgroundColor: theme.colors.primary.main,
+                      color: "#fff",
                       "&:hover": { backgroundColor: theme.colors.primary.dark },
                     }}
                   >
@@ -385,6 +512,17 @@ export default function DashboardProducts() {
                   required
                   multiline
                   rows={4}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -395,6 +533,17 @@ export default function DashboardProducts() {
                   value={currentProduct.material}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -405,6 +554,17 @@ export default function DashboardProducts() {
                   value={currentProduct.dimensions}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -415,6 +575,17 @@ export default function DashboardProducts() {
                   value={currentProduct.weight}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -425,6 +596,17 @@ export default function DashboardProducts() {
                   value={currentProduct.finish}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -436,6 +618,17 @@ export default function DashboardProducts() {
                   value={currentProduct.warranty}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -446,13 +639,24 @@ export default function DashboardProducts() {
                   value={currentProduct.delivery}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.border,
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
             </Grid>
           )}
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions sx={{ backgroundColor: theme.colors.background.paper }}>
           <Button
             onClick={handleDialogClose}
             sx={{ color: theme.colors.text.secondary }}
@@ -465,6 +669,7 @@ export default function DashboardProducts() {
             disabled={loading}
             sx={{
               backgroundColor: theme.colors.primary.main,
+              color: "#fff",
               "&:hover": { backgroundColor: theme.colors.primary.dark },
             }}
           >

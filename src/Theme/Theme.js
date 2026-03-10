@@ -20,9 +20,9 @@ export const lightTheme = {
 export const darkTheme = {
     colors: {
         primary: {
-            main: "#1565c0",
+            main: "#1055a3",
             dark: "#0d47a1",
-            light: "#42a5f5",
+            light: "#3481bf",
         },
         text: {
             primary: "#ffffff",
@@ -30,7 +30,7 @@ export const darkTheme = {
         },
         background: {
             paper: "#2c3e50",
-            caffe: "#34495e",
+            default: "#34495e",
         },
         shadow: "rgba(0,0,0,0.5)",
     },

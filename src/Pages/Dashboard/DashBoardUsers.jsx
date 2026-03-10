@@ -189,12 +189,21 @@ export default function DashboardUsers() {
   );
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        mt: 4,
+        mb: 4,
+        backgroundColor: theme.colors.background.main,
+        minHeight: "100vh",
+        borderRadius: 1,
+      }}
+    >
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="h4"
           component="h1"
-          sx={{ color: theme.colors.text.primary, mb: 3 }}
+          sx={{ color: theme.colors.text.primary, mb: 3, fontWeight: "bold" }}
         >
           Users Management
         </Typography>
@@ -206,7 +215,22 @@ export default function DashboardUsers() {
             size="small"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ flexGrow: 1 }}
+            sx={{
+              flexGrow: 1,
+              "& .MuiOutlinedInput-root": {
+                color: theme.colors.text.primary,
+                "& fieldset": {
+                  borderColor: theme.colors.text.secondary,
+                },
+                "&:hover fieldset": {
+                  borderColor: theme.colors.primary.main,
+                },
+              },
+              "& .MuiOutlinedInput-input::placeholder": {
+                color: theme.colors.text.secondary,
+                opacity: 0.7,
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <SearchIcon
@@ -219,36 +243,68 @@ export default function DashboardUsers() {
 
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
-            <CircularProgress />
+            <CircularProgress sx={{ color: theme.colors.primary.main }} />
           </Box>
         )}
 
         {error && (
-          <Typography color="error" sx={{ mb: 2 }}>
+          <Typography
+            color="error"
+            sx={{
+              mb: 2,
+              backgroundColor: isDarkMode ? "#5c2424" : "#ffebee",
+              p: 2,
+              borderRadius: 1,
+            }}
+          >
             {error}
           </Typography>
         )}
 
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            backgroundColor: theme.colors.background.default,
+            color: theme.colors.text.primary,
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow
-                sx={{ backgroundColor: theme.colors.background.default }}
+                sx={{
+                  backgroundColor: theme.colors.primary.main,
+                  "& th": { color: "#fff", fontWeight: "bold" },
+                }}
               >
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Created At</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell sx={{ color: "#fff" }}>Name</TableCell>
+                <TableCell sx={{ color: "#fff" }}>Email</TableCell>
+                <TableCell sx={{ color: "#fff" }}>Role</TableCell>
+                <TableCell sx={{ color: "#fff" }}>Created At</TableCell>
+                <TableCell sx={{ color: "#fff" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredUsers.map((user) => (
-                <TableRow key={user._id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
-                  <TableCell>
+                <TableRow
+                  key={user._id}
+                  sx={{
+                    backgroundColor: theme.colors.background.default,
+                    "&:hover": {
+                      backgroundColor: isDarkMode ? "#333" : "#f5f5f5",
+                    },
+                    borderBottom: `1px solid ${isDarkMode ? "#444" : "#ddd"}`,
+                  }}
+                >
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {user.name}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {user.email}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.primary }}>
+                    {user.role}
+                  </TableCell>
+                  <TableCell sx={{ color: theme.colors.text.secondary }}>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
@@ -278,29 +334,50 @@ export default function DashboardUsers() {
         onClose={handleDialogClose}
         fullWidth
         maxWidth="md"
+        PaperProps={{
+          sx: {
+            backgroundColor: theme.colors.background.default,
+            color: theme.colors.text.primary,
+          },
+        }}
       >
         <DialogTitle
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            backgroundColor: theme.colors.primary.main,
+            color: "#fff",
           }}
         >
-          <Typography variant="h6">Edit User</Typography>
-          <IconButton onClick={handleDialogClose}>
+          <Typography variant="h6" sx={{ color: "#fff" }}>
+            Edit User
+          </Typography>
+          <IconButton onClick={handleDialogClose} sx={{ color: "#fff" }}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
 
-        <DialogContent dividers>
+        <DialogContent
+          dividers
+          sx={{ backgroundColor: theme.colors.background.default }}
+        >
           {loading && (
             <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: theme.colors.primary.main }} />
             </Box>
           )}
 
           {error && (
-            <Typography color="error" sx={{ mb: 2 }}>
+            <Typography
+              color="error"
+              sx={{
+                mb: 2,
+                backgroundColor: isDarkMode ? "#5c2424" : "#ffebee",
+                p: 2,
+                borderRadius: 1,
+              }}
+            >
               {error}
             </Typography>
           )}
@@ -315,6 +392,20 @@ export default function DashboardUsers() {
                   value={currentUser.name}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.text.secondary,
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: theme.colors.text.primary,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -326,18 +417,38 @@ export default function DashboardUsers() {
                   value={currentUser.email}
                   onChange={handleInputChange}
                   required
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.text.secondary,
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: theme.colors.text.primary,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="role-select-label">Role</InputLabel>
+                  <InputLabel sx={{ color: theme.colors.text.secondary }}>
+                    Role
+                  </InputLabel>
                   <Select
-                    labelId="role-select-label"
-                    id="role-select"
                     name="role"
                     value={currentUser.role}
                     label="Role"
                     onChange={handleInputChange}
+                    sx={{
+                      color: theme.colors.text.primary,
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: theme.colors.text.secondary,
+                      },
+                    }}
                   >
                     <MenuItem value="user">User</MenuItem>
                     <MenuItem value="admin">Admin</MenuItem>
@@ -345,7 +456,11 @@ export default function DashboardUsers() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography
+                  variant="subtitle1"
+                  gutterBottom
+                  sx={{ color: theme.colors.text.primary }}
+                >
                   Change Password (leave blank to keep current password)
                 </Typography>
               </Grid>
@@ -358,6 +473,20 @@ export default function DashboardUsers() {
                   value={currentUser.password}
                   onChange={handleInputChange}
                   helperText="Password must be at least 6 characters with lowercase, uppercase, and number"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.text.secondary,
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: theme.colors.text.primary,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -367,13 +496,33 @@ export default function DashboardUsers() {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      color: theme.colors.text.primary,
+                      "& fieldset": {
+                        borderColor: theme.colors.text.secondary,
+                      },
+                    },
+                    "& .MuiInputBase-input": {
+                      color: theme.colors.text.primary,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: theme.colors.text.secondary,
+                    },
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="body2" color="textSecondary">
+                <Typography
+                  variant="body2"
+                  sx={{ color: theme.colors.text.secondary, mb: 1 }}
+                >
                   User ID: {currentUser._id}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
+                <Typography
+                  variant="body2"
+                  sx={{ color: theme.colors.text.secondary }}
+                >
                   Created: {new Date(currentUser.createdAt).toLocaleString()}
                 </Typography>
               </Grid>
@@ -381,7 +530,9 @@ export default function DashboardUsers() {
           )}
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions
+          sx={{ backgroundColor: theme.colors.background.default, p: 2 }}
+        >
           <Button
             onClick={handleDialogClose}
             sx={{ color: theme.colors.text.secondary }}
@@ -394,6 +545,7 @@ export default function DashboardUsers() {
             disabled={loading}
             sx={{
               backgroundColor: theme.colors.primary.main,
+              color: "#fff",
               "&:hover": { backgroundColor: theme.colors.primary.dark },
             }}
           >
