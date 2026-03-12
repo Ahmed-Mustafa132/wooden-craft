@@ -52,7 +52,7 @@ export default function About() {
                 gutterBottom
                 sx={{ color: theme.colors.text.primary }}
               >
-                Crafting Excellence
+                Store Name 
               </Typography>
 
               <Typography
@@ -64,9 +64,19 @@ export default function About() {
                   color: theme.colors.text.secondary,
                 }}
               >
-                At Store Name, we transform raw wood into masterpieces. Our
-                passion for woodworking drives us to create furniture that
-                combines traditional craftsmanship with modern design.
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Saepe
+                illo perferendis culpa. Inventore delectus non nihil in corporis
+                vel voluptas? Consequatur officiis harum aperiam maxime nulla,
+                labore tempore et repellendus voluptas excepturi illo doloribus
+                consectetur nobis fugit vitae optio. Eum eius ipsam maxime
+                ducimus sint iusto. At placeat earum eligendi? Quisquam odio
+                accusamus esse animi nisi ab delectus ipsum illum odit rem
+                excepturi perspiciatis deserunt ea corporis amet eaque repellat,
+                officia ducimus sapiente totam a. Blanditiis ipsa ratione
+                repellendus, reiciendis modi esse deleniti veritatis
+                voluptatibus numquam, quisquam obcaecati quis voluptas aut
+                suscipit corrupti incidunt, pariatur enim error illum dolore
+                commodi?
               </Typography>
 
               <Button
