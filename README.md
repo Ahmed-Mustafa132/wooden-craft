@@ -1,6 +1,6 @@
-# Wooden Furniture Frontend
+# store  Frontend
 
-This is the frontend application for the Store Name  namee-commerce platform. Built with React and Vite, it provides a modern, responsive interface for customers to browse and purchase handcrafted wooden furniture.
+This is the frontend application for the Store Name  namee-commerce platform. Built with React and Vite, it provides a modern, responsive interface for customers to browse and purchase handcrafted store Name.
 
 ## Features
 

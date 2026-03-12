@@ -43,7 +43,7 @@ export default function Dashboard() {
     {
       title: "Products",
       icon: <ProductsIcon sx={{ fontSize: 50 }} />,
-      description: "Mange Your Storage  of Wooden Furniture ",
+      description: "Mange Your Storage  of store Name products",
       action: () => navigate("/dashboard/products"),
       color: theme.colors.primary.main,
       stats: `${data.products} product`,

@@ -105,7 +105,7 @@ const Navbar = () => {
       sx={{ textAlign: "center", bgcolor: theme.colors.primary.main }}
     >
       <Typography variant="h6" sx={{ my: 2, color: "#fff" }}>
-        Wooden Craft
+        store Name
       </Typography>
       <List>
         {navItems.map((item) => (
@@ -166,7 +166,7 @@ const Navbar = () => {
               letterSpacing: ".5px",
             }}
           >
-            Wooden Craft
+            store Name
           </Typography>
 
           {!isMobile && (

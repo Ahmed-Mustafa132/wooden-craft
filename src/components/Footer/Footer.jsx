@@ -32,7 +32,7 @@ export default function Footer() {
       >
         <Container>
           <Grid container spacing={8}>
-            {/* Brand Section */}
+            {/* store Section */}
             <Grid item xs={12} md={4}>
               <Typography
                 variant="h4"
@@ -140,8 +140,7 @@ export default function Footer() {
 
           <Box sx={{ textAlign: "center" }}>
             <Typography sx={{ mb: 1 }}>
-              © {new Date().getFullYear()} Store Name  . All Rights
-              Reserved.
+              © {new Date().getFullYear()} Store Name . All Rights Reserved.
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.8 }}>
               All content and designs presented on this website are protected

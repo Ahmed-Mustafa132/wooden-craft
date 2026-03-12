@@ -59,7 +59,7 @@ export default function Aboutme() {
                   sx={{ color: theme.colors.text.secondary }}
                 >
                   At Store Name, we believe in the timeless beauty of
-                  handcrafted wooden furniture. Our journey began with a simple
+                  handcrafted store Name. Our journey began with a simple
                   passion for woodworking and has evolved into a commitment to
                   creating exceptional pieces that bring warmth and character to
                   your home.
