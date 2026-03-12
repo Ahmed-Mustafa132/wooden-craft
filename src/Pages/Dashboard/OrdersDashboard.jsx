@@ -16,6 +16,8 @@ import {
   Container,
   Select,
   MenuItem,
+  Stack,
+  TextField,
   FormControl,
   IconButton,
   Dialog,
@@ -34,6 +36,7 @@ import {
   CheckCircle,
   Pending,
   Edit,
+  Search as SearchIcon,
   Visibility,
 } from "@mui/icons-material";
 import axiosInstance from "../../axiosConfig/axiosConfig";
@@ -46,6 +49,8 @@ const OrdersDashboard = () => {
   const { isDarkMode } = useThemeContext();
   const theme = getTheme(isDarkMode);
   const [orders, setOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [editDialog, setEditDialog] = useState({ open: false, order: null });
   const [productsDialog, setProductsDialog] = useState({
@@ -117,6 +122,13 @@ const OrdersDashboard = () => {
     return (price * quantity).toFixed(2);
   };
 
+  const filteredOrders = orders.filter(
+    (order) =>
+      (order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order._id.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (statusFilter === "all" || order.status === statusFilter),
+  );
+
   const StatCard = ({ title, value, icon }) => (
     <Card
       elevation={3}
@@ -158,6 +170,62 @@ const OrdersDashboard = () => {
         >
           Orders Dashboard
         </Typography>
+
+        <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+          <TextField
+            placeholder="Search by Customer or Order ID..."
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                color: theme.colors.text.primary,
+                backgroundColor: theme.colors.background.paper,
+                "& fieldset": {
+                  borderColor: theme.colors.border,
+                },
+                "&:hover fieldset": {
+                  borderColor: theme.colors.primary.main,
+                },
+              },
+              "& .MuiOutlinedInput-input::placeholder": {
+                color: theme.colors.text.secondary,
+                opacity: 0.7,
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <SearchIcon
+                  sx={{ mr: 1, color: theme.colors.text.secondary }}
+                />
+              ),
+            }}
+          />
+          <FormControl sx={{ minWidth: 150 }} size="small">
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              displayEmpty
+              sx={{
+                backgroundColor: theme.colors.background.paper,
+                color: theme.colors.text.primary,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: theme.colors.border,
+                },
+                "& .MuiSvgIcon-root": {
+                  color: theme.colors.text.primary,
+                },
+              }}
+            >
+              <MenuItem value="all">All Statuses</MenuItem>
+              <MenuItem value="pending">Pending</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+              <MenuItem value="cancelled">Cancelled</MenuItem>
+            </Select>
+          </FormControl>
+        </Stack>
 
         <Grid container spacing={3} mb={4}>
           <Grid item xs={12} sm={6} md={3}>
@@ -234,7 +302,7 @@ const OrdersDashboard = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <TableRow key={order._id}>
                   <TableCell sx={{ color: theme.colors.text.primary }}>
                     {order._id}
@@ -307,21 +375,21 @@ const OrdersDashboard = () => {
                 variant="subtitle1"
                 sx={{ color: theme.colors.text.secondary }}
               >
-               address :{productsDialog.order?.address}
+                address :{productsDialog.order?.address}
               </Typography>
-       <Typography
+              <Typography
                 variant="subtitle1"
                 sx={{ color: theme.colors.text.secondary }}
               >
                 city: {productsDialog.order?.city}
               </Typography>
-                    <Typography
+              <Typography
                 variant="subtitle1"
                 sx={{ color: theme.colors.text.secondary }}
               >
                 postalCode: {productsDialog.order?.postalCode}
               </Typography>
-                    <Typography
+              <Typography
                 variant="subtitle1"
                 sx={{ color: theme.colors.text.secondary }}
               >

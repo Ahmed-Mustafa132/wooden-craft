@@ -156,7 +156,9 @@ export default function DashboardProducts() {
   const filteredProducts = products.filter(
     (product) =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchTerm.toLowerCase()),
+      (product.category?.name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   return (

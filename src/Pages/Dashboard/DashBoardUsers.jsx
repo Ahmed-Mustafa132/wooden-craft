@@ -39,6 +39,7 @@ export default function DashboardUsers() {
   const { isDarkMode } = useThemeContext();
   const theme = getTheme(isDarkMode);
   const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
   const [users, setUsers] = useState([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -180,12 +181,11 @@ export default function DashboardUsers() {
     }
   };
 
-  // Filter users based on search term
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase()),
+  // Filter users based on search term and role
+  const filteredUsers = users.filter((user) =>
+    (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (roleFilter === "all" || user.role === roleFilter),
   );
 
   return (
@@ -210,7 +210,7 @@ export default function DashboardUsers() {
 
         <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
           <TextField
-            placeholder="Search users..."
+            placeholder="Search by name or email..."
             variant="outlined"
             size="small"
             value={searchTerm}
@@ -239,6 +239,33 @@ export default function DashboardUsers() {
               ),
             }}
           />
+          <FormControl sx={{ minWidth: 120 }} size="small">
+            <InputLabel
+              sx={{
+                color: theme.colors.text.secondary,
+              }}
+            >
+              Role
+            </InputLabel>
+            <Select
+              value={roleFilter}
+              label="Role"
+              onChange={(e) => setRoleFilter(e.target.value)}
+              sx={{
+                color: theme.colors.text.primary,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: theme.colors.text.secondary,
+                },
+                "& .MuiSvgIcon-root": {
+                  color: theme.colors.text.primary,
+                },
+              }}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="user">User</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
+            </Select>
+          </FormControl>
         </Stack>
 
         {loading && (
