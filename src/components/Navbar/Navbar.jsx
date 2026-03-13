@@ -59,7 +59,11 @@ const Navbar = () => {
 
   const userSection = (
     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-      <IconButton onClick={() => toggleTheme()} sx={{ color: "#fff" }} id="mod">
+      <IconButton
+        onClick={() => toggleTheme()}
+        sx={{ color: "#fff" }}
+        aria-label="mod"
+      >
         {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
       <CartDrawer />

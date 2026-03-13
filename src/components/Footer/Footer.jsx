@@ -107,6 +107,7 @@ export default function Footer() {
                     color="inherit"
                     href="https://facebook.com"
                     target="_blank"
+                    aria-label="Facebook"
                   >
                     <FacebookIcon />
                   </IconButton>
@@ -114,6 +115,7 @@ export default function Footer() {
                     color="inherit"
                     href="https://instagram.com"
                     target="_blank"
+                    aria-label="Instagram"
                   >
                     <InstagramIcon />
                   </IconButton>
@@ -121,6 +123,7 @@ export default function Footer() {
                     color="inherit"
                     href="https://twitter.com"
                     target="_blank"
+                    aria-label="Twitter"
                   >
                     <TwitterIcon />
                   </IconButton>
@@ -128,6 +131,7 @@ export default function Footer() {
                     color="inherit"
                     href="https://linkedin.com"
                     target="_blank"
+                    aria-label="LinkedIn"
                   >
                     <LinkedInIcon />
                   </IconButton>
