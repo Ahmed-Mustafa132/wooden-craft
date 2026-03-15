@@ -6,6 +6,8 @@ import {
   Divider,
   IconButton,
   Stack,
+  TextField,
+  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -31,34 +33,43 @@ export default function Footer() {
         }}
       >
         <Container>
-          <Grid container spacing={8}>
-            {/* store Section */}
-            <Grid item xs={12} md={4}>
+          <Grid container spacing={6}>
+            {/* Brand Section */}
+            <Grid item xs={12} md={5}>
               <Typography
                 variant="h4"
                 sx={{
                   fontWeight: "bold",
                   mb: 2,
+                  letterSpacing: 1,
                   textShadow: `2px 2px 4px ${theme.colors.shadow}`,
                 }}
               >
-                store name
+                Store Name
               </Typography>
-              <Typography variant="h6" sx={{ mb: 3, fontWeight: 300 }}>
-                Crafting Excellence Since 2010
+              <Typography
+                variant="body1"
+                sx={{ mb: 3, maxWidth: 350, lineHeight: 1.8, opacity: 0.9 }}
+              >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio officiis magni, quidem autem veritatis reprehenderit perferendis vero repudiandae nam modi.
               </Typography>
             </Grid>
 
             {/* Quick Links */}
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 3 }}>
+                Explore
+              </Typography>
               <Stack spacing={2}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                  Quick Links
-                </Typography>
-                {["Home", "Products", "About", "Contact"].map((link) => (
+                {[
+                  { name: "Home", path: "/" },
+                  { name: "Our Collection", path: "/products" },
+                  { name: "Our Story", path: "/about" },
+                  { name: "Contact Us", path: "/contact" },
+                ].map((item) => (
                   <Link
-                    key={link}
-                    to={`/${link.toLowerCase()}`}
+                    key={item.name}
+                    to={item.path}
                     style={{
                       textDecoration: "none",
                       color: "#fff",
@@ -71,28 +82,52 @@ export default function Footer() {
                       },
                     }}
                   >
-                    {link}
+                    {item.name}
                   </Link>
                 ))}
               </Stack>
             </Grid>
 
-            {/* Contact & Social */}
+            {/* Newsletter & Social */}
             <Grid item xs={12} md={4}>
-              <Stack spacing={3}>
+              <Stack spacing={2}>
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                  Stay Connected
+                  Join Our Community
+                </Typography>
+                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                  Subscribe for exclusive offers and new arrivals.
                 </Typography>
 
-                <Box>
-                  <Typography>info@Store Name.com</Typography>
-                  <Typography>(123) 456-7890</Typography>
+                <Box component="form" sx={{ display: "flex", gap: 1 }}>
+                  <TextField
+                    size="small"
+                    placeholder="Your Email"
+                    variant="outlined"
+                    sx={{
+                      bgcolor: "rgba(255,255,255,0.15)",
+                      borderRadius: 1,
+                      input: { color: "#fff" },
+                      "& fieldset": { border: "none" },
+                    }}
+                  />
+                  <Button
+                    variant="contained"
+                    sx={{
+                      bgcolor: "#fff",
+                      color: theme.colors.primary.main,
+                      fontWeight: "bold",
+                      "&:hover": { bgcolor: "#f0f0f0" },
+                    }}
+                  >
+                    Join
+                  </Button>
                 </Box>
 
                 <Stack
                   direction="row"
                   spacing={2}
                   sx={{
+                    mt: 2,
                     "& .MuiIconButton-root": {
                       bgcolor: theme.colors.overlay,
                       transition: "0.3s",
@@ -144,7 +179,7 @@ export default function Footer() {
 
           <Box sx={{ textAlign: "center" }}>
             <Typography sx={{ mb: 1 }}>
-              © {new Date().getFullYear()} Store Name . All Rights Reserved.
+              © {new Date().getFullYear()} store name. All Rights Reserved.
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.8 }}>
               All content and designs presented on this website are protected

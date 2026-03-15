@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -8,10 +8,12 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Button,
   useTheme,
   useMediaQuery,
+  Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
@@ -32,6 +34,14 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -79,7 +89,10 @@ const Navbar = () => {
             sx={{
               color: "#fff",
               textTransform: "none",
-              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+              fontWeight: 600,
+              borderRadius: "20px",
+              px: 3,
+              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.2)" },
             }}
             onClick={handleLogout}
           >
@@ -92,7 +105,10 @@ const Navbar = () => {
             sx={{
               color: "#fff",
               textTransform: "none",
-              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+              fontWeight: 600,
+              borderRadius: "20px",
+              px: 3,
+              "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.2)" },
             }}
             onClick={() => navigate("/login")}
           >
@@ -108,32 +124,36 @@ const Navbar = () => {
       onClick={handleDrawerToggle}
       sx={{ textAlign: "center", bgcolor: theme.colors.primary.main }}
     >
-      <Typography variant="h6" sx={{ my: 2, color: "#fff" }}>
-        store Name
+      <Typography
+        variant="h5"
+        sx={{ my: 3, color: "#fff", fontWeight: 800, letterSpacing: "1px" }}
+      >
+        STORE NAME
       </Typography>
       <List>
         {navItems.map((item) => (
-          <ListItem
-            key={item.name}
-            sx={{
-              justifyContent: "center",
-              borderBottom:
-                location.pathname === item.path
-                  ? `3px solid ${"#fff"}`
-                  : "3px solid transparent",
-            }}
-            onClick={() => navigate(item.path)}
-          >
-            <ListItemText
-              primary={item.name}
+          <ListItem key={item.name} disablePadding>
+            <ListItemButton
+              onClick={() => navigate(item.path)}
               sx={{
-                "& .MuiTypography-root": {
-                  fontSize: "1.1rem",
-                  fontWeight: 500,
-                  color: theme.colors.text.secondary,
-                },
+                textAlign: "center",
+                py: 2,
+                backgroundColor:
+                  location.pathname === item.path
+                    ? "rgba(255,255,255,0.1)"
+                    : "transparent",
               }}
-            />
+            >
+              <ListItemText
+                primary={item.name}
+                primaryTypographyProps={{
+                  fontSize: "1.1rem",
+                  fontWeight: 600,
+                  color: "#fff",
+                  textTransform: "uppercase",
+                }}
+              />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>
@@ -145,65 +165,91 @@ const Navbar = () => {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: theme.colors.primary.main,
+          background: scrolled
+            ? isDarkMode
+              ? "rgba(30, 30, 30, 0.85)"
+              : theme.colors.primary.main
+            : theme.colors.primary.main,
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+          boxShadow: scrolled ? "0 8px 32px 0 rgba(0, 0, 0, 0.1)" : "none",
+          transition: "all 0.4s ease",
+          py: scrolled ? 0.5 : 1.5,
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          {isMobile && (
-            <IconButton
-              sx={{ color: "#fff" }}
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
+        <Container maxWidth="xl">
+          <Toolbar sx={{ justifyContent: "space-between" }}>
+            {isMobile && (
+              <IconButton
+                sx={{ color: "#fff" }}
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+
+            <Typography
+              variant="h4"
+              component="div"
+              sx={{
+                flexGrow: isMobile ? 0 : 1,
+                color: "#fff",
+                fontWeight: 900,
+                letterSpacing: "-1px",
+                background: "linear-gradient(45deg, #FFF 30%, #E0E0E0 90%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                cursor: "pointer",
+                textShadow: "0 2px 10px rgba(0,0,0,0.1)",
+              }}
+              onClick={() => navigate("/")}
             >
-              <MenuIcon />
-            </IconButton>
-          )}
+              Store Name
+            </Typography>
 
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              flexGrow: isMobile ? 0 : 1,
-              color: "#fff",
-              fontWeight: 700,
-              letterSpacing: ".5px",
-            }}
-          >
-            store Name
-          </Typography>
-
-          {!isMobile && (
-            <Box sx={{ display: "flex", gap: 4 }}>
-              {navItems.map((item) => (
-                <Button
-                  key={item.name}
-                  sx={{
-                    color: "#fff",
-                    fontSize: "1rem",
-                    textTransform: "none",
-                    borderBottom:
-                      location.pathname === item.path
-                        ? `3px solid ${"#fff"}`
-                        : "3px solid transparent",
-                    borderRadius: 0,
-                    paddingBottom: "4px",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
+            {!isMobile && (
+              <Box sx={{ display: "flex", gap: 4 }}>
+                {navItems.map((item) => (
+                  <Button
+                    key={item.name}
+                    sx={{
                       color: "#fff",
-                      backgroundColor: "transparent",
-                    },
-                  }}
-                  onClick={() => navigate(item.path)}
-                >
-                  {item.name}
-                </Button>
-              ))}
-            </Box>
-          )}
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      textTransform: "none",
+                      position: "relative",
+                      "&::after": {
+                        content: '""',
+                        position: "absolute",
+                        width: location.pathname === item.path ? "100%" : "0",
+                        height: "2px",
+                        bottom: "2px",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        backgroundColor: "#fff",
+                        transition: "width 0.3s ease-in-out",
+                      },
+                      "&:hover::after": {
+                        width: "100%",
+                      },
+                      "&:hover": {
+                        color: "#fff",
+                        backgroundColor: "transparent",
+                        textShadow: "0 0 8px rgba(255,255,255,0.5)",
+                      },
+                    }}
+                    onClick={() => navigate(item.path)}
+                  >
+                    {item.name}
+                  </Button>
+                ))}
+              </Box>
+            )}
 
-          {userSection}
-        </Toolbar>
+            {userSection}
+          </Toolbar>
+        </Container>
       </AppBar>
 
       <Box component="nav">
@@ -219,7 +265,8 @@ const Navbar = () => {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: 240,
-              bgcolor: "#fff",
+              bgcolor: theme.colors.primary.main,
+              backdropFilter: "blur(10px)",
             },
           }}
         >

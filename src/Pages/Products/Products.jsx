@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Container,
   Typography,
@@ -19,6 +19,8 @@ import { getTheme } from "../../Theme/Theme";
 import { useThemeContext } from "../../Context/ThemeContext";
 import Product from "../../components/Product/Product";
 import CircularIndeterminate from "../../components/Loading/Loading";
+import * as THREE from "three";
+import ThreeBackground from "../../components/ThreeBG/ThreeBackground";
 
 export default function Products() {
   const { isDarkMode } = useThemeContext();
@@ -29,6 +31,43 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [loading, setLoading] = useState(true);
+  const objectsRef = useRef({});
+
+  // 3D Background Initialization
+  const init = (scene) => {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      color: theme.colors.primary.main,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.15,
+    });
+
+    const group = new THREE.Group();
+    for (let i = 0; i < 40; i++) {
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = (Math.random() - 0.5) * 50;
+      mesh.position.y = (Math.random() - 0.5) * 50;
+      mesh.position.z = (Math.random() - 0.5) * 30;
+      mesh.rotation.x = Math.random() * Math.PI;
+      mesh.rotation.y = Math.random() * Math.PI;
+      mesh.scale.setScalar(Math.random() * 2 + 0.5);
+      group.add(mesh);
+    }
+    scene.add(group);
+    objectsRef.current.group = group;
+  };
+
+  const animate = () => {
+    const { group } = objectsRef.current;
+    if (group) {
+      group.rotation.y += 0.001;
+      group.children.forEach((child, i) => {
+        child.rotation.x += 0.01;
+        child.rotation.y += 0.01;
+      });
+    }
+  };
 
   useEffect(() => {
     // Fetch Categories
@@ -60,39 +99,51 @@ export default function Products() {
     return <CircularIndeterminate />;
   }
   return (
-    <Box sx={{ py: 8, minHeight: "50vh" }}>
-      <Container>
-        <Typography
-          variant="h3"
-          align="center"
-          gutterBottom
-          sx={{
-            fontWeight: "bold",
-            color: theme.colors.text.primary,
-            mb: 6,
-          }}
-        >
-          Our Collection
-        </Typography>
+    <Box sx={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}>
+      {/* 3D Background */}
+      <ThreeBackground
+        init={init}
+        animate={animate}
+        dependencies={[theme]}
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 0,
+          opacity: 0.6,
+        }}
+      />
+
+      {/* Content Layer */}
+      <Container sx={{ position: "relative", zIndex: 1, py: 8 }}>
+
+
 
         <Paper
           component="form"
           elevation={0}
           sx={{
             p: 2,
-            mb: 6,
+            mb: 8,
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             alignItems: "center",
             gap: 2,
-            border: `1px solid ${theme.colors.border}`,
-            borderRadius: "12px",
-            backgroundColor: "transparent",
+            border: `1px solid ${isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)"}`,
+            borderRadius: "24px",
+            // Glassmorphism
+            background: isDarkMode
+              ? "rgba(20,20,20,0.6)"
+              : "rgba(255,255,255,0.6)",
+            backdropFilter: "blur(20px)",
+            boxShadow: theme.colors.shadow,
           }}
         >
           <TextField
             fullWidth
-            placeholder="Search our collection..."
+            placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
@@ -105,15 +156,17 @@ export default function Products() {
             sx={{
               flexGrow: 1,
               "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                backgroundColor: theme.colors.background.paper,
+                borderRadius: "16px",
+                backgroundColor: isDarkMode
+                  ? "rgba(255,255,255,0.05)"
+                  : "rgba(0,0,0,0.03)",
                 color: theme.colors.text.primary,
                 "& fieldset": { borderColor: "transparent" },
                 "&:hover fieldset": {
-                  borderColor: theme.colors.primary.main,
+                  borderColor: "transparent",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: theme.colors.primary.main,
+                  borderColor: "transparent",
                 },
               },
             }}
@@ -133,13 +186,15 @@ export default function Products() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 sx={{
                   color: theme.colors.text.primary,
-                  borderRadius: "8px",
-                  backgroundColor: theme.colors.background.paper,
+                  borderRadius: "16px",
+                  backgroundColor: isDarkMode
+                    ? "rgba(255,255,255,0.05)"
+                    : "rgba(0,0,0,0.03)",
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "transparent",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: theme.colors.primary.main,
+                    borderColor: "transparent",
                   },
                   "& .MuiSvgIcon-root": {
                     color: theme.colors.text.secondary,
@@ -164,13 +219,15 @@ export default function Products() {
                 onChange={(e) => setSortOrder(e.target.value)}
                 sx={{
                   color: theme.colors.text.primary,
-                  borderRadius: "8px",
-                  backgroundColor: theme.colors.background.paper,
+                  borderRadius: "16px",
+                  backgroundColor: isDarkMode
+                    ? "rgba(255,255,255,0.05)"
+                    : "rgba(0,0,0,0.03)",
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "transparent",
                   },
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: theme.colors.primary.main,
+                    borderColor: "transparent",
                   },
                   "& .MuiSvgIcon-root": {
                     color: theme.colors.text.secondary,
@@ -187,7 +244,13 @@ export default function Products() {
 
         <Grid container spacing={4}>
           {!products || products.length === 0 ? (
-            <Container>There are no products available</Container>
+            <Container
+              sx={{ textAlign: "center", color: theme.colors.text.secondary }}
+            >
+              <Typography variant="h5">
+                No products found matching your criteria.
+              </Typography>
+            </Container>
           ) : (
             <>
               {products.map((product) => (
